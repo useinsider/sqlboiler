@@ -129,6 +129,12 @@ func (q *Query) QueryRow() *sql.Row {
 		fmt.Fprintln(boil.DebugWriter, qs)
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
+
+	if errors.Is(err, mysql.ErrInvalidConn) {
+		time.Sleep(5 * time.Microsecond)
+		r, err = q.executor.Exec(qs, args...)
+	}
+
 	return q.executor.QueryRow(qs, args...)
 }
 
@@ -139,6 +145,12 @@ func (q *Query) Query() (*sql.Rows, error) {
 		fmt.Fprintln(boil.DebugWriter, qs)
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
+
+	if errors.Is(err, mysql.ErrInvalidConn) {
+		time.Sleep(5 * time.Microsecond)
+		r, err = q.executor.Exec(qs, args...)
+	}
+
 	return q.executor.Query(qs, args...)
 }
 
