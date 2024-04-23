@@ -2,8 +2,11 @@ package queries
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
+	"time"
 
+	"github.com/go-sql-driver/mysql"
 	"github.com/volatiletech/sqlboiler/boil"
 )
 
@@ -108,7 +111,15 @@ func (q *Query) Exec() (sql.Result, error) {
 		fmt.Fprintln(boil.DebugWriter, qs)
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
-	return q.executor.Exec(qs, args...)
+
+	r, err := q.executor.Exec(qs, args...)
+
+	if errors.Is(err, mysql.ErrInvalidConn) {
+		time.Sleep(5 * time.Microsecond)
+		r, err = q.executor.Exec(qs, args...)
+	}
+
+	return r, err
 }
 
 // QueryRow executes the query for the One finisher and returns a row
