@@ -130,14 +130,7 @@ func (q *Query) QueryRow() *sql.Row {
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
 
-	r, err := q.executor.QueryRow(qs, args...)
-
-	if errors.Is(err, mysql.ErrInvalidConn) {
-		time.Sleep(5 * time.Microsecond)
-		r, err = q.executor.QueryRow(qs, args...)
-	}
-
-	return r, err
+	return q.executor.QueryRow(qs, args...)
 }
 
 // Query executes the query for the All finisher and returns multiple rows
