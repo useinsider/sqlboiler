@@ -10,8 +10,8 @@ import (
 
 	_ "github.com/lib/pq"
 	"github.com/pkg/errors"
-	"github.com/volatiletech/sqlboiler/bdb"
-	"github.com/volatiletech/sqlboiler/strmangle"
+	"github.com/useinsider/sqlboiler/bdb"
+	"github.com/useinsider/sqlboiler/strmangle"
 )
 
 // PostgresDriver holds the database connection string and a handle

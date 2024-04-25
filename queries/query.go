@@ -2,9 +2,12 @@ package queries
 
 import (
 	"database/sql"
+	"errors"
 	"fmt"
+	"time"
 
-	"github.com/volatiletech/sqlboiler/boil"
+	"github.com/go-sql-driver/mysql"
+	"github.com/useinsider/sqlboiler/boil"
 )
 
 // joinKind is the type of join
@@ -108,7 +111,15 @@ func (q *Query) Exec() (sql.Result, error) {
 		fmt.Fprintln(boil.DebugWriter, qs)
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
-	return q.executor.Exec(qs, args...)
+
+	r, err := q.executor.Exec(qs, args...)
+
+	if errors.Is(err, mysql.ErrInvalidConn) {
+		time.Sleep(5 * time.Microsecond)
+		r, err = q.executor.Exec(qs, args...)
+	}
+
+	return r, err
 }
 
 // QueryRow executes the query for the One finisher and returns a row
@@ -118,7 +129,15 @@ func (q *Query) QueryRow() *sql.Row {
 		fmt.Fprintln(boil.DebugWriter, qs)
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
-	return q.executor.QueryRow(qs, args...)
+
+	r, err := q.executor.QueryRow(qs, args...)
+
+	if errors.Is(err, mysql.ErrInvalidConn) {
+		time.Sleep(5 * time.Microsecond)
+		r, err = q.executor.QueryRow(qs, args...)
+	}
+
+	return r, err
 }
 
 // Query executes the query for the All finisher and returns multiple rows
@@ -128,7 +147,14 @@ func (q *Query) Query() (*sql.Rows, error) {
 		fmt.Fprintln(boil.DebugWriter, qs)
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
-	return q.executor.Query(qs, args...)
+
+	r, err := q.executor.Query(qs, args...)
+	if errors.Is(err, mysql.ErrInvalidConn) {
+		time.Sleep(5 * time.Microsecond)
+		r, err = q.executor.Query(qs, args...)
+	}
+
+	return r, err
 }
 
 // ExecP executes a query that does not need a row returned

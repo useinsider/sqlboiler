@@ -8,8 +8,8 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
-	"github.com/volatiletech/sqlboiler/boil"
-	"github.com/volatiletech/sqlboiler/strmangle"
+	"github.com/useinsider/sqlboiler/boil"
+	"github.com/useinsider/sqlboiler/strmangle"
 )
 
 var (
@@ -62,25 +62,25 @@ func (q *Query) BindP(obj interface{}) {
 //
 // Example Query:
 //
-//   type JoinStruct struct {
-//     // User1 can have it's struct fields bound to since it specifies
-//     // ,bind in the struct tag, it will look specifically for
-//     // fields that are prefixed with "user." returning from the query.
-//     // For example "user.id" column name will bind to User1.ID
-//     User1      *models.User `boil:"user,bind"`
-//     // User2 will follow the same rules as noted above except it will use
-//     // "friend." as the prefix it's looking for.
-//     User2      *models.User `boil:"friend,bind"`
-//     // RandomData will not be recursed into to look for fields to
-//     // bind and will not be bound to because of the - for the name.
-//     RandomData myStruct     `boil:"-"`
-//     // Date will not be recursed into to look for fields to bind because
-//     // it does not specify ,bind in the struct tag. But it can be bound to
-//     // as it does not specify a - for the name.
-//     Date       time.Time
-//   }
+//	type JoinStruct struct {
+//	  // User1 can have it's struct fields bound to since it specifies
+//	  // ,bind in the struct tag, it will look specifically for
+//	  // fields that are prefixed with "user." returning from the query.
+//	  // For example "user.id" column name will bind to User1.ID
+//	  User1      *models.User `boil:"user,bind"`
+//	  // User2 will follow the same rules as noted above except it will use
+//	  // "friend." as the prefix it's looking for.
+//	  User2      *models.User `boil:"friend,bind"`
+//	  // RandomData will not be recursed into to look for fields to
+//	  // bind and will not be bound to because of the - for the name.
+//	  RandomData myStruct     `boil:"-"`
+//	  // Date will not be recursed into to look for fields to bind because
+//	  // it does not specify ,bind in the struct tag. But it can be bound to
+//	  // as it does not specify a - for the name.
+//	  Date       time.Time
+//	}
 //
-//   models.Users(qm.InnerJoin("users as friend on users.friend_id = friend.id")).Bind(&joinStruct)
+//	models.Users(qm.InnerJoin("users as friend on users.friend_id = friend.id")).Bind(&joinStruct)
 //
 // For custom objects that want to use eager loading, please see the
 // loadRelationships function.

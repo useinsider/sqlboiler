@@ -18,8 +18,8 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/satori/go.uuid"
-	"github.com/volatiletech/sqlboiler/strmangle"
-	"github.com/volatiletech/sqlboiler/types"
+	"github.com/useinsider/sqlboiler/strmangle"
+	"github.com/useinsider/sqlboiler/types"
 )
 
 var (
@@ -157,7 +157,8 @@ func randDate(s *Seed) time.Time {
 //  The value will always be a non-null and non-zero value.
 
 // If canBeNull is true:
-//  The value has the possibility of being null or non-zero at random.
+//
+//	The value has the possibility of being null or non-zero at random.
 func randomizeField(s *Seed, field reflect.Value, fieldType string, canBeNull bool) error {
 	kind := field.Kind()
 	typ := field.Type()
