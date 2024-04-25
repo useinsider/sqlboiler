@@ -130,11 +130,6 @@ func (q *Query) QueryRow() *sql.Row {
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
 
-	if errors.Is(err, mysql.ErrInvalidConn) {
-		time.Sleep(5 * time.Microsecond)
-		r, err = q.executor.Exec(qs, args...)
-	}
-
 	return q.executor.QueryRow(qs, args...)
 }
 
@@ -146,12 +141,14 @@ func (q *Query) Query() (*sql.Rows, error) {
 		fmt.Fprintln(boil.DebugWriter, args)
 	}
 
+	r, err := q.executor.Query(qs, args...)
+
 	if errors.Is(err, mysql.ErrInvalidConn) {
 		time.Sleep(5 * time.Microsecond)
-		r, err = q.executor.Exec(qs, args...)
+		r, err = q.executor.Query(qs, args...)
 	}
 
-	return q.executor.Query(qs, args...)
+	return r, err
 }
 
 // ExecP executes a query that does not need a row returned
